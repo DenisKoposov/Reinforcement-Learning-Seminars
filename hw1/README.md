@@ -38,11 +38,11 @@ The name of the pickle file corresponds to the name of the gym environment.
 
 |Environment|Behavior Cloning|DAgger|
 |-----------|----------------|------|
-|Ant-v1|![Ant-v1-bc](demonstration_bc/Ant-v1_050_05/openaigym.video.0.29870.video000000.gif)|![Ant-v1-da](demonstration_da/Ant-v1_050_05/*.gif)|
-|HalfCheetah-v1|![HalfCheetah-v1-bc](demonstration_bc/HalfCheetah-v1_050_05/*.gif)|![HalfCheetah-v1-da](demonstration_da/HalfCheetah-v1_050_05/*.gif)|
-|Hopper-v1|![Hopper-v1-bc](demonstration_bc/Hopper-v1_050_05/*.gif)|![Hopper-v1-da](demonstration_da/Hopper-v1_050_05/*.gif)|
-|Reacher-v1|![Reacher-v1-bc](demonstration_bc/Reacher-v1_050_05/*.gif)|![Reacher-v1-da](demonstration_da/Reacher-v1_050_05/*.gif)|
-|Walker2d-v1|![Walker2d-v1-bc](demonstration_bc/Walker2d-v1_050_05/*.gif)|![Walker2d-v1-da](demonstration_da/Walker2d-v1_050_05/*.gif)|
+|Ant-v1|![Ant-v1-bc](demonstrations_bc/Ant-v1_050_05/openaigym.video.0.29870.video000000.gif)|![Ant-v1-da](demonstrations_da/Ant-v1_050_05/*.gif)|
+|HalfCheetah-v1|![HalfCheetah-v1-bc](demonstrations_bc/HalfCheetah-v1_050_05/*.gif)|![HalfCheetah-v1-da](demonstrations_da/HalfCheetah-v1_050_05/*.gif)|
+|Hopper-v1|![Hopper-v1-bc](demonstrations_bc/Hopper-v1_050_05/*.gif)|![Hopper-v1-da](demonstrations_da/Hopper-v1_050_05/*.gif)|
+|Reacher-v1|![Reacher-v1-bc](demonstrations_bc/Reacher-v1_050_05/*.gif)|![Reacher-v1-da](demonstrations_da/Reacher-v1_050_05/*.gif)|
+|Walker2d-v1|![Walker2d-v1-bc](demonstrations_bc/Walker2d-v1_050_05/*.gif)|![Walker2d-v1-da](demonstrations_da/Walker2d-v1_050_05/*.gif)|
 
 ## Summary:
 As we can see, **DAgger performs much better than Behavior Cloning** in almost every case(for this model without varying paraneters), excluding Humanoid-v1 environment, because both algorithms didn't work out a good policy for this particular case. It may be a consequence of high dimensional input(~400 observations, ~100 actions), so the simple 2-layer ANN with 64 hidden neurons just can't handle this sophisticated data.
@@ -50,20 +50,20 @@ As we can see, **DAgger performs much better than Behavior Cloning** in almost e
 ## Graphs
 
 ### Ant-v1
-![Ant-v1-bc-loss-graph]() ![Ant-v1-da-loss-graph]()
-![Ant-v1-bc-reward-graph]() ![Ant-v1-da-reward-graph]()
+![Ant-v1-bc-loss-graph](figures_bc/loss_Ant-v1_050_05.png) ![Ant-v1-da-loss-graph](figures_da/loss_Ant-v1_050_05.png)
+![Ant-v1-bc-reward-graph](figures_bc/reward_Ant-v1_050_05.png) ![Ant-v1-da-reward-graph](figures_da/reward_Ant-v1_050_05.png)
 ### HalfCheetah-v1
-![HalfCheetah-v1-bc-loss-graph]() ![HalfCheetah-v1-da-loss-graph]()
-![HalfCheetah-v1-bc-reward-graph]() ![HalfCheetah-v1-da-reward-graph]()
+![HalfCheetah-v1-bc-loss-graph](figures_bc/loss_HalfCheetah-v1_050_05.png) ![HalfCheetah-v1-da-loss-graph](figures_da/loss_HalfCheetah-v1_050_05.png)
+![HalfCheetah-v1-bc-reward-graph](figures_bc/reward_HalfCheetah-v1_050_05.png) ![HalfCheetah-v1-da-reward-graph](figures_da/reward_HalfCheetah-v1_050_05.png)
 ### Hopper-v1
-![Hopper-v1-bc-loss-graph]() ![Hopper-v1-da-loss-graph]()
-![Hopper-v1-bc-reward-graph]() ![Hopper-v1-da-reward-graph]()
+![Hopper-v1-bc-loss-graph](figures_bc/loss_Hopper-v1_050_05.png) ![Hopper-v1-da-loss-graph](figures_da/loss_Hopper-v1_050_05.png)
+![Hopper-v1-bc-reward-graph](figures_bc/reward_Hopper-v1_050_05.png) ![Hopper-v1-da-reward-graph](figures_da/reward_Hopper-v1_050_05.png)
 ### Humanoid-v1
-![Humanoid-v1-bc-loss-graph]() ![Humanoid-v1-da-loss-graph]()
-![Humanoid-v1-bc-reward-graph]() ![Humanoid-v1-da-reward-graph]()
+![Humanoid-v1-bc-loss-graph](figures_bc/loss_Humanoid-v1_050_05.png) ![Humanoid-v1-da-loss-graph](figures_da/loss_Humanoid-v1_050_05.png)
+![Humanoid-v1-bc-reward-graph](figures_bc/reward_Humanoid-v1_050_05.png) ![Humanoid-v1-da-reward-graph](figures_da/reward_Humanoid-v1_050_05.png)
 ### Reacher-v1
-![Reacher-v1-bc-loss-graph]() ![Reacher-v1-da-loss-graph]()
-![Reacher-v1-bc-reward-graph]() ![Reacher-v1-da-reward-graph]()
+![Reacher-v1-bc-loss-graph](figures_bc/loss_Reacher-v1_050_05.png) ![Reacher-v1-da-loss-graph](figures_da/loss_Reacher-v1_050_05.png)
+![Reacher-v1-bc-reward-graph](figures_bc/reward_Reacher-v1_050_05.png) ![Reacher-v1-da-reward-graph](figures_da/reward_Reacher-v1_050_05.png)
 ### Walker2d-v1
-![Walker2d-v1-bc-loss-graph]() ![Walker2d-v1-da-loss-graph]()
-![Walker2d-v1-bc-reward-graph]() ![Walker2d-v1-da-reward-graph]()
+![Walker2d-v1-bc-loss-graph](figures_bc/loss_Walker2d-v1_050_05.png) ![Walker2d-v1-da-loss-graph](figures_da/loss_Walker2d-v1_050_05.png)
+![Walker2d-v1-bc-reward-graph](figures_bc/reward_Walker2d-v1_050_05.png) ![Walker2d-v1-da-reward-graph](figures_da/reward_Walker2d-v1_050_05.png)
