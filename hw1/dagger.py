@@ -31,6 +31,24 @@ class Policy(nn.Module):
         x = self.fc2(x)
         return x
 
+class Powerful_Policy(nn.Module):
+    
+    def __init__(self, obs_shape, action_shape):
+        super(Powerful_Policy, self).__init__()
+        self.fc1 = nn.Linear(obs_shape, 512)
+        self.dr1 = nn.Dropout(0.3)
+        self.fc2 = nn.Linear(512, 512)
+        self.dr2 = nn.Dropout(0.3)
+        self.fc3 = nn.Linear(512, action_shape)
+        
+    def forward(self, x):
+        x = F.relu(self.fc1(x))
+        x = self.dr1(x)
+        x = F.relu(self.fc2(x))
+        x = self.dr2(x)
+        x = self.fc3(x)
+        return x
+
 def preprocess(observation):
     """
     Description:
@@ -173,7 +191,10 @@ def train_policy(expert_obs, expert_act, args, policy=None):
         policy - trained neural network
     """
     if policy == None:
-        policy = Policy(expert_obs.shape[2], expert_act.shape[2])
+        if args.policy_type == 0:
+            policy = Policy(expert_obs.shape[2], expert_act.shape[2])
+        if args.policy_type == 1:
+            policy = Powerful_Policy(expert_obs.shape[2], expert_act.shape[2])
     
     history = []
     
@@ -238,6 +259,8 @@ def validation(policy, args, root_dir="demonstrations_da", validation_rollouts=1
 
     if not simplified and args.save_demo:
         tail = args.envname+"_"+str(args.num_rollouts).zfill(3)+"_"+str(args.dagger_steps).zfill(2)
+        if args.policy_type == 1:
+            root_dir = str(args.policy_type)+"_"+full_path
         full_path = root_dir+"/"+tail
         if not os.path.exists(root_dir):
             os.makedirs(root_dir)
@@ -266,10 +289,12 @@ def validation(policy, args, root_dir="demonstrations_da", validation_rollouts=1
             if step >= max_steps:
                 break
         rewards.append(totalr)
-            
-    #print('rewards', rewards)
-    print('mean reward', np.mean(rewards))
-    print('std of reward', np.std(rewards))
+    
+    if not simplified:
+        #print('rewards', rewards)
+        print('mean reward', np.mean(rewards))
+        print('std of reward', np.std(rewards))
+        
     return (np.mean(rewards), np.std(rewards))
 
 if __name__ == '__main__':
@@ -283,6 +308,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_rollouts', type=int, default=50)
     parser.add_argument('--batch_size', type=int, default=128)
     parser.add_argument('--epochs', type=int, default=5)
+    parser.add_argument('--policy_type', type=int, default=0)
     parser.add_argument('--render', action='store_true')
     parser.add_argument('--demo', action='store_true')
     parser.add_argument('--save_demo', action='store_true')
@@ -296,7 +322,7 @@ if __name__ == '__main__':
     tf.logging.set_verbosity(tf.logging.FATAL)
     #Loading expert policy
     expert_policy = load_policy.load_policy(args.expert_policy_file)
-    print('Expert policy loaded for', args.envname)
+    print('Running DAgger for', args.envname)
     
     history, policy, train_obs, train_act = None, None, None, None
     #Loading prepared expert dataset
@@ -309,7 +335,7 @@ if __name__ == '__main__':
     histories = [history]
     new_train_obs, new_train_act = train_obs, train_act
     rewards.append(validation(policy, args, simplified=True))
-    print("Finished Dagger Step 0")
+    #print("Finished Dagger Step 0")
     #DAgger steps
     for i in range(args.dagger_steps):
         new_train_obs, new_train_act = concatenate_data(new_train_obs, new_train_act,
@@ -318,7 +344,7 @@ if __name__ == '__main__':
         policies.append(new_policy)
         histories.append(new_history)
         rewards.append(validation(new_policy, args, simplified=True))
-        print('Finished Dagger Step', str(i + 1))
+        #print('Finished Dagger Step', str(i + 1))
         
     histories = list(map(np.array, histories))
 
@@ -339,6 +365,8 @@ if __name__ == '__main__':
         
         if args.save_graph:
             root_dir = "figures_da"
+            if args.policy_type == 1:
+                root_dir = str(args.policy_type)+"_"+root_dir
             if not os.path.exists(root_dir):
                 os.makedirs(root_dir)
             str_roll = str(args.num_rollouts).zfill(3)

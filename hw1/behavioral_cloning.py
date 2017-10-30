@@ -21,13 +21,29 @@ class Policy(nn.Module):
     def __init__(self, obs_shape, action_shape):
         super(Policy, self).__init__()
         self.fc1 = nn.Linear(obs_shape, 64)
-        #init.xavier_uniform(self.fc1.weight)
         self.fc2 = nn.Linear(64, action_shape)
-        #init.xavier_uniform(self.fc2.weight)
 
     def forward(self, x):
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
+        return x
+
+class Powerful_Policy(nn.Module):
+    
+    def __init__(self, obs_shape, action_shape):
+        super(Powerful_Policy, self).__init__()
+        self.fc1 = nn.Linear(obs_shape, 512)
+        self.dr1 = nn.Dropout(0.1)
+        self.fc2 = nn.Linear(512, 512)
+        self.dr2 = nn.Dropout(0.1)
+        self.fc3 = nn.Linear(512, action_shape)
+        
+    def forward(self, x):
+        x = F.tanh(self.fc1(x))
+        x = self.dr1(x)
+        x = F.tanh(self.fc2(x))
+        x = self.dr2(x)
+        x = self.fc3(x)
         return x
     
 def preprocess(observation):
@@ -84,13 +100,17 @@ def train_policy(expert_obs, expert_act, args):
         history - statistics(epochs, iterations, loss)
         policy - trained neural network
     """
-    policy = Policy(expert_obs.shape[2], expert_act.shape[2])
+    if args.policy_type == 0:
+        policy = Policy(expert_obs.shape[2], expert_act.shape[2])
+    if args.policy_type == 1:
+        policy = Powerful_Policy(expert_obs.shape[2], expert_act.shape[2])
+    
     histories = []
     rewards = []
     
     criterion = nn.MSELoss()
     learning_rate = args.lr
-    optimizer = optim.Adam(policy.parameters(), learning_rate, weight_decay=0.0000001) 
+    optimizer = optim.Adam(policy.parameters(), learning_rate, weight_decay=0.00001) 
     #optimizer = optim.RMSprop(policy.parameters())
     
     all_observations = expert_obs.reshape(-1, expert_obs.shape[2])
@@ -128,12 +148,12 @@ def train_policy(expert_obs, expert_act, args):
             running_loss += loss.data[0]
             history.append([epoch * num_batches * args.batch_size + (i + 1) * args.batch_size, running_loss])
             running_loss = 0.0
-        print('Epoch', str(epoch))
+        #print('Epoch', str(epoch))
         rewards.append(validation(policy, args, simplified=True))
         histories.append(history)
                 
 
-    print('Finished training')
+    #print('Finished training')
     return histories, policy, rewards
 
 def validation(policy, args, root_dir="demonstrations_bc", validation_rollouts=10, simplified=False):
@@ -153,6 +173,8 @@ def validation(policy, args, root_dir="demonstrations_bc", validation_rollouts=1
     
     if not simplified and args.save_demo:
         tail = args.envname+"_"+str(args.num_rollouts).zfill(3)+"_"+str(args.epochs).zfill(2)
+        if args.policy_type == 1:
+            root_dir = args.policy_type+"_"+root_dir
         full_path = root_dir+"/"+tail
         if not os.path.exists(root_dir):
             os.makedirs(root_dir)
@@ -181,10 +203,12 @@ def validation(policy, args, root_dir="demonstrations_bc", validation_rollouts=1
             if step >= max_steps:
                 break
         rewards.append(totalr)
-            
-    #print('rewards', rewards)
-    print('mean reward', np.mean(rewards))
-    print('std of reward', np.std(rewards))
+
+    if not simplified:
+        #print('rewards', rewards)
+        print('mean reward', np.mean(rewards))
+        print('std of reward', np.std(rewards))
+
     return (np.mean(rewards), np.std(rewards))
             
 if __name__ == '__main__':
@@ -196,6 +220,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_rollouts', type=int, default=50)
     parser.add_argument('--batch_size', type=int, default=128)
     parser.add_argument('--epochs', type=int, default=5)
+    parser.add_argument('--policy_type', type=int, default=0)
     parser.add_argument('--render', action='store_true')
     parser.add_argument('--demo', action='store_true')
     parser.add_argument('--save_demo', action='store_true')
@@ -203,6 +228,7 @@ if __name__ == '__main__':
     parser.add_argument('--save_graph', action='store_true')
     args = parser.parse_args()
     
+    print('Running BC for', args.envname)
     history, policy, train_obs, train_act = None, None, None, None
     
     #getting dataset from the expert policy
@@ -228,6 +254,8 @@ if __name__ == '__main__':
         
         if args.save_graph:
             root_dir = "figures_bc"
+            if args.policy_type == 1:
+                root_dir = str(args.policy_type)+"_"+root_dir
             if not os.path.exists(root_dir):
                 os.makedirs(root_dir)
             str_roll = str(args.num_rollouts).zfill(3)
