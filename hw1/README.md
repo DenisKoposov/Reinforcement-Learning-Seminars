@@ -38,7 +38,7 @@ The name of the pickle file corresponds to the name of the gym environment.
 
 |Environment|Behavior Cloning|DAgger|
 |-----------|----------------|------|
-|Ant-v1|![Ant-v1-bc](/demonstration_bc/Ant-v1_050_05/*.gif)|![Ant-v1-da](/demonstration_da/Ant-v1_050_05/*.gif)|
+|Ant-v1|![Ant-v1-bc](/demonstration_bc/Ant-v1_050_05/openaigym.video.0.29870.video000000.gif)|![Ant-v1-da](/demonstration_da/Ant-v1_050_05/*.gif)|
 |HalfCheetah-v1|![HalfCheetah-v1-bc](/demonstation_bc/HalfCheetah-v1_050_05/*.gif)|![HalfCheetah-v1-da](/demonstration_da/HalfCheetah-v1_050_05/*.gif)|
 |Hopper-v1|![Hopper-v1-bc](/demonstration_bc/Hopper-v1_050_05/*.gif)|![Hopper-v1-da](/demonstration_da/Hopper-v1_050_05/*.gif)|
 |Reacher-v1|![Reacher-v1-bc](/demonstration_bc/Reacher-v1_050_05/*.gif)|![Reacher-v1-da](/demonstration_da/Reacher-v1_050_05/*.gif)|
