@@ -11,9 +11,9 @@
 |Reacher-v1    |-4.29(1.61)            |-8.20(2.11)      |**-4.20(1.41)**    |
 |Walker2d-v1   |5510.97(46.70)         |2524.92(1758.67) |**5483.19(113.88)**|
 
-**Hyperparameters:** batch_size = 128, 5 epochs, 5 iterations of DAgger, 50 roll-outs
-**ANN:** 2 layer network with ReLU activation(64 hidden neurons)
-**Optimizer**: Adam, lr = 0.007, weight_decay(L2)=0.0000001
++ **Hyperparameters:** batch_size = 128, 5 epochs, 5 iterations of DAgger, 50 roll-outs
++ **ANN:** 2 layer network with ReLU activation(64 hidden neurons)
++ **Optimizer**: Adam, lr = 0.007, weight_decay(L2)=0.0000001
 
 ## Visual demonstation
 
@@ -26,11 +26,12 @@
 |Walker2d-v1|![Walker2d-v1-bc](demonstrations_bc/Walker2d-v1_050_05/Walker2d-v1_050_05.gif)|![Walker2d-v1-da](demonstrations_da/Walker2d-v1_050_05/Walker2d-v1_050_05.gif)|
 
 ## Summary:
-+ **Behavioral Cloning** achieves comparable results in **Ant-v1** and **HalfCheetah-v1** environments.
-+ **DAgger** shows good performance in every environment, excluding **Humanoid-v1**.
-+ **DAgger performs much better than Behavior Cloning** in almost every case(for this model without varying parameters), excluding Humanoid-v1 environment, because both algorithms didn't work out a good policy for this particular case. It may be a consequence of high dimensional input(~400 observations, ~100 actions), so the simple 2-layer ANN with 64 hidden neurons just can't handle this sophisticated data.
++ **Behavioral Cloning** achieves comparable results in `Ant-v1` and `HalfCheetah-v1` environments.
++ **DAgger** shows good performance in every environment, excluding `Humanoid-v1`.
++ **DAgger performs much better than Behavior Cloning** in almost every case(for this model without varying parameters), excluding `Humanoid-v1` environment, because both algorithms didn't work out a good policy for this particular case. It may be a consequence of high dimensional input(~400 observations, ~100 actions), so the simple 2-layer ANN with 64 hidden neurons just can't handle this sophisticated data.
 ## Graphs
-From graphs below, we can see that there is **no particular need in more then 5 dagger steps(DAgger) or more then 5 epochs(BC)**, because it doesn't give better performance and takes much more computational time(especially in case of DAgger, where dataset is always growing). 
+From graphs below, we can see that there is **no particular need in more then 5 dagger steps(DAgger) or more then 5 epochs(BC)**, because it doesn't give better performance and takes much more computational time(especially in case of DAgger, where dataset is always growing). It makes sense only for `Humanoid-v1` and BC algorithm, where reward is growing with a number of epochs, but remains poor even after 10 itertations.
+The fact is that after 5 epochs(approximately) we observe either stable(oscillating) performance or significant drop of it.
 ### Ant-v1
 |Method|Reward|Loss|
 |------|------|----|
