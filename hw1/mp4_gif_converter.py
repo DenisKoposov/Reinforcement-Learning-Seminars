@@ -15,5 +15,5 @@ for root in [root_demo_bc, root_demo_da]:
             if f[-4:] == '.mp4':
                 clip = (VideoFileClip(root+"/"+directory+"/"+f)
                         .subclip(0,8)
-                        .resize(0.3))
-                clip.write_gif(root+"/"+directory+"/"+directory+".gif", fps=60)
+                        .resize(0.4))
+                clip.write_gif(root+"/"+directory+"/"+directory+".gif", fps=15)
