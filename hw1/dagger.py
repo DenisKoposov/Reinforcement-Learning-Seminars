@@ -314,8 +314,6 @@ if __name__ == '__main__':
     parser.add_argument('--save_demo', action='store_true')
     parser.add_argument('--draw_graph', action='store_true')
     parser.add_argument('--save_graph', action='store_true')
-    parser.add_argument('--draw_training_validation_curve', action='store_true')
-    parser.add_argument('--save_training_validation_curve', action='store_true')
     args = parser.parse_args()
     #Setting tensorflow flags to suppress useless warning messages.
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
